@@ -1,8 +1,11 @@
+# Build stage
+FROM maven:latest AS build
+COPY src /home/app/src
+COPY pom.xml /home/app
+RUN mvn -f /home/app/pom.xml clean test package -DskipTests
+
+# Package stage
 FROM azul/zulu-openjdk-alpine:21
-ENV DATASOURCE_URL DATASOURCE_URL
-ENV DATASOURCE_USERNAME DATASOURCE_USERNAME
-ENV DATASOURCE_PASSWORD DATASOURCE_PASSWORD
-ENV eureka.client.serviceUrl.defaultZone eureka.client.serviceUrl.defaultZone
-EXPOSE 8083
-COPY target/*.jar hackaton-cartao-app-0.0.1-SNAPSHOT.jar
-ENTRYPOINT ["java","-jar","/hackaton-cartao-app-0.0.1-SNAPSHOT.jar"]
+COPY --from=build /home/app/target/*.jar hackaton-cartao-app.jar
+EXPOSE 8082
+ENTRYPOINT ["java","-jar","hackaton-cartao-app.jar"]
