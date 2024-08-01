@@ -5,7 +5,7 @@ spring:
     application:
         name: hackaton-cartao-app
     datasource:
-        url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5432/db_usuarios}
+        url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5432/db_cartao}
         username: ${DATASOURCE_USERNAME:postgres}
         password: ${DATASOURCE_PASSWORD:teste123}
         driver-class-name: org.postgresql.Driver
@@ -27,3 +27,6 @@ eureka:
             defatulZone: ${eureka.client.serviceUrl.defaultZone:http://localhost:8761/eureka}
         fetch-registry: true
         register-with-eureka: true
+
+api:
+    key: ${API_KEY:http://localhost:8083/api/cliente/validarCPF/}
