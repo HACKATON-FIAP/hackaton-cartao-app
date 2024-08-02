@@ -41,14 +41,4 @@ public class Cartao {
     @Pattern(regexp = "d{3}", message = "Código de verificação no formato: 123")
     private String cvv;
 
-    /*
-
-        Cartao cartao = new Cartao();
-        cartao.setCpf("12345678901");
-        cartao.setLimite("1000.00");
-        cartao.setNumeroCartao("1234 5678 1234 5678");
-        cartao.setDataValidade("12/24");
-        cartao.setCodigoVerificacao("123");
-     */
-
 }

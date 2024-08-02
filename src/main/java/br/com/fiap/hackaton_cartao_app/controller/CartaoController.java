@@ -18,7 +18,7 @@ public class CartaoController {
     private CartaoService cartaoService;
 
     @PostMapping
-    public ResponseEntity<Cartao> gerarCartao(@Valid @RequestBody Cartao cartao) {
+    public ResponseEntity<Cartao> gerarCartao(@RequestBody Cartao cartao) {
         try {
             Cartao cartaoCriado = cartaoService.salvarCartao(cartao);
             return new ResponseEntity<>(cartaoCriado, HttpStatus.CREATED);
