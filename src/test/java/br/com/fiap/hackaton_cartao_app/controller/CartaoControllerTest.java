@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -47,27 +46,27 @@ class CartaoControllerTest {
     private ObjectMapper objectMapper = new ObjectMapper();
 
 
-        @Test
-        void shouldGerarCartao() throws Exception {
-            Cartao cartao = new Cartao();
-            cartao.setId(1L);
-            cartao.setCpf("11111111111");
-            cartao.setNumero("5200 1211 1435 1234");
-            cartao.setData_validade("12/24");
-            cartao.setCvv("123");
+    @Test
+    void shouldGerarCartao() throws Exception {
+        Cartao cartao = new Cartao();
+        cartao.setId(1L);
+        cartao.setCpf("11111111111");
+        cartao.setNumero("5200 1211 1435 1234");
+        cartao.setData_validade("12/24");
+        cartao.setCvv("123");
 
-            String cartaoJson = objectMapper.writeValueAsString(cartao);
+        String cartaoJson = objectMapper.writeValueAsString(cartao);
 
-            when(cartaoService.salvarCartao(any(Cartao.class))).thenReturn(cartao);
+        when(cartaoService.salvarCartao(any(Cartao.class))).thenReturn(cartao);
 
-            mockMvc.perform(MockMvcRequestBuilders.post("/api/cartao")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(cartaoJson))
-                    .andExpect(status().isCreated())
-                    .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                    .andExpect(content().json(cartaoJson));
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/cartao")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(cartaoJson))
+                .andExpect(status().isCreated())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(cartaoJson));
 
-        }
+    }
 
     @Test
     public void testGerarCartao_CartaoLimitException() {
@@ -101,5 +100,23 @@ class CartaoControllerTest {
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
     }
+
+    @Test
+    public void testConsultarCartaoComSucesso() {
+        Cartao cartao = new Cartao();
+        cartao.setId(1L);
+        cartao.setCpf("11111111111");
+        cartao.setNumero("5200 1211 1435 1234");
+        cartao.setData_validade("12/24");
+        cartao.setCvv("123");
+
+        when(cartaoService.consultarCartao(cartao.getCpf())).thenReturn(cartao);
+
+        ResponseEntity<Cartao> response = cartaoController.consultarCartao(cartao.getCpf());
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
+    }
+
 
 }

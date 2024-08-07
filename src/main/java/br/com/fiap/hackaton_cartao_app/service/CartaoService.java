@@ -93,11 +93,10 @@ public class CartaoService {
         }
     }
 
-    public Cartao consultarCartao(String cpf){
+    public Cartao consultarCartao(String cpf) {
         Optional<Cartao> cartao = cartaoRepository.findByCpf(cpf);
         return cartao.orElse(null);
     }
-
 
 
 }
