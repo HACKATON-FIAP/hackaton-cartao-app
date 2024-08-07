@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Optional;
+
 @Service
 @AllArgsConstructor
 public class CartaoService {
@@ -83,13 +85,19 @@ public class CartaoService {
 
     public boolean consultarCPF(String cpf) {
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> retornoCPF = restTemplate.getForEntity(String.format("%s%s", apiClientUrl, cpf), String.class);
+        ResponseEntity<String> retornoCPF = restTemplate.getForEntity(String.format("http://localhost:8083/api/cliente/validarCPF/%s", cpf), String.class);
         if (retornoCPF.getStatusCode().is2xxSuccessful()) {
             return true;
         } else {
             return false;
         }
     }
+
+    public Cartao consultarCartao(String cpf){
+        Optional<Cartao> cartao = cartaoRepository.findByCpf(cpf);
+        return cartao.orElse(null);
+    }
+
 
 
 }

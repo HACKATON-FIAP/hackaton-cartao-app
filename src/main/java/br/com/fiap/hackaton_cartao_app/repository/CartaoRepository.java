@@ -11,5 +11,6 @@ public interface CartaoRepository extends JpaRepository<Cartao, Long> {
     Optional<Cartao> findByNumero(String numeroCartao);
     long countByCpf(String cpf);
     long countByNumero(String numero);
+    Optional<Cartao> findByCpf(String cpf);
 
 }

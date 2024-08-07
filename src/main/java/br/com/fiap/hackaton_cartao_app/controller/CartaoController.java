@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/cartao")
+@CrossOrigin("*")
 public class CartaoController {
 
     private CartaoService cartaoService;
@@ -30,6 +31,14 @@ public class CartaoController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // Retorna 500 Internal Server Error para outros erros
         }
     }
+
+    @GetMapping("/consultar/{cpf}")
+    public ResponseEntity<Cartao> consultarCartao(@PathVariable String cpf) throws CartaoException {
+        Cartao cartaoRetorno = cartaoService.consultarCartao(cpf);
+        return new ResponseEntity<>(cartaoRetorno, HttpStatus.OK);
+    }
+
+
 
 }
 
