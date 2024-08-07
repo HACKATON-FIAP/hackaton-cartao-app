@@ -35,7 +35,11 @@ public class CartaoController {
     @GetMapping("/consultar/{cpf}")
     public ResponseEntity<Cartao> consultarCartao(@PathVariable String cpf) throws CartaoException {
         Cartao cartaoRetorno = cartaoService.consultarCartao(cpf);
-        return new ResponseEntity<>(cartaoRetorno, HttpStatus.OK);
+        if (cartaoRetorno == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }else{
+            return new ResponseEntity<>(cartaoRetorno, HttpStatus.OK);
+        }
     }
 
 
