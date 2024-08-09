@@ -85,7 +85,7 @@ public class CartaoService {
 
     public boolean consultarCPF(String cpf) {
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> retornoCPF = restTemplate.getForEntity(String.format("http://localhost:8083/api/cliente/validarCPF/%s", cpf), String.class);
+        ResponseEntity<String> retornoCPF = restTemplate.getForEntity(String.format("http://hackaton-clientes-app:8083/api/cliente/validarCPF/%s", cpf), String.class);
         if (retornoCPF.getStatusCode().is2xxSuccessful()) {
             return true;
         } else {

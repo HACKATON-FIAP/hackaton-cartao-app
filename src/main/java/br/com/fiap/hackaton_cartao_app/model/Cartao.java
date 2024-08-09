@@ -26,19 +26,15 @@ public class Cartao {
     @Pattern(regexp = "\\d{11}", message = "CPF deve conter 11 dígitos")
     private String cpf;
 
-    @NotBlank(message = "Limite é obrigatório")
-    private Long limite;
+    private long limite;
 
     @NotBlank(message = "Cartão é obrigatório")
-    @Pattern(regexp = "d{4} \\d{4} \\d{4} 1234", message = "Número do cartão deve seguir o formato: **** **** **** 1234")
     private String numero;
 
     @NotBlank(message = "Data de validade é obrigatório")
-    @Pattern(regexp = "d{2}/\\d{2}", message = "Data de validade no formato: 12/24")
     private String data_validade;
 
     @NotBlank(message = "Código de verificação é obrigatório")
-    @Pattern(regexp = "d{3}", message = "Código de verificação no formato: 123")
     private String cvv;
 
 }
