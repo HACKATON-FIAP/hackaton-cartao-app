@@ -4,6 +4,7 @@ import br.com.fiap.hackaton_cartao_app.exception.CartaoException;
 import br.com.fiap.hackaton_cartao_app.exception.CartaoLimitException;
 import br.com.fiap.hackaton_cartao_app.model.Cartao;
 import br.com.fiap.hackaton_cartao_app.service.CartaoService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,10 +18,15 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -117,6 +123,60 @@ class CartaoControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
 
     }
+
+@Test
+public void testUpdateCartaoComSucesso() throws JsonProcessingException {
+    Cartao cartao = new Cartao();
+    cartao.setId(1L);
+    cartao.setCpf("11111111111");
+    cartao.setNumero("5200 1211 1435 1234");
+    cartao.setData_validade("12/24");
+    cartao.setCvv("123");
+    cartao.setLimite(900L);
+
+    String cartaoJson = objectMapper.writeValueAsString(cartao);
+
+    when(cartaoService.updateLimiteCartao(any(Cartao.class))).thenReturn(Optional.of(cartao));
+
+    try {
+        mockMvc.perform(put("/api/cartao/update")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(cartaoJson))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(cartaoJson));
+    } catch (Exception e) {
+        throw new RuntimeException(e);
+    }
+}
+
+    @Test
+    void testHandleCartaoException() throws Exception {
+        // Simulate CartaoException in the controller
+        when(cartaoService.updateLimiteCartao(any())).thenThrow(new CartaoException("An error occurred"));
+
+        mockMvc.perform(put("/api/cartao/update")  // Adjust URL and request as needed
+                        .contentType("application/json")
+                        .content(new ObjectMapper().writeValueAsString(new Cartao())))
+                .andExpect(status().isInternalServerError())
+                .andExpect(content().string("An error occurred"))
+                .andDo(result -> {
+                    // Optional: print result for debugging
+                    System.out.println(result.getResponse().getContentAsString());
+                });
+
+        // Verify if the exception handler is invoked
+        verify(cartaoService, times(1)).updateLimiteCartao(any());
+    }
+
+
+
+
+
+
+
+
+
 
 
 }
