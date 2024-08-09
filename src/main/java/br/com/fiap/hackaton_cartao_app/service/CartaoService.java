@@ -98,5 +98,11 @@ public class CartaoService {
         return cartao.orElse(null);
     }
 
+    public Optional<Cartao> updateLimiteCartao(Cartao cartao) {
+          Optional<Cartao> cartaoRetorno = cartaoRepository.findById(cartao.getId());
+          cartaoRepository.save(cartao);
+          return cartaoRetorno;
+    }
+
 
 }

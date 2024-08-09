@@ -4,11 +4,12 @@ import br.com.fiap.hackaton_cartao_app.exception.CartaoException;
 import br.com.fiap.hackaton_cartao_app.exception.CartaoLimitException;
 import br.com.fiap.hackaton_cartao_app.model.Cartao;
 import br.com.fiap.hackaton_cartao_app.service.CartaoService;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
@@ -43,6 +44,11 @@ public class CartaoController {
     }
 
 
+    @PutMapping("/update")
+    public ResponseEntity<Cartao> update(@RequestBody Cartao cartao) throws CartaoException {
+        Optional<Cartao> cartaoAtual = cartaoService.updateLimiteCartao(cartao);
+        return new ResponseEntity<>(cartaoAtual.orElse(null), HttpStatus.OK);
+    }
 
 }
 
